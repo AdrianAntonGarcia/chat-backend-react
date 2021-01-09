@@ -1,6 +1,7 @@
 const { response } = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
+const { generarJWT } = require('../helpers/jwt');
 /**
  * crearUsuario: Realiza el registro del usuario.
  * @param {*} req
@@ -19,15 +20,22 @@ const crearUsuario = async (req, res = response) => {
         msg: 'El correo ya existe',
       });
     }
+
     const usuario = new Usuario(req.body);
+
     // Encriptar contraseña, por defecto 10 vueltas en el salt
     const salt = bcrypt.genSaltSync();
     usuario.password = bcrypt.hashSync(password, salt);
 
     // Guardar usuario en BD
     await usuario.save();
+
+    // Generar el JWT
+    const token = await generarJWT(usuario._id);
+
     res.json({
       usuario,
+      token,
     });
   } catch (error) {
     console.log(error);
