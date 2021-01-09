@@ -1,4 +1,5 @@
 const { response } = require('express');
+const { validationResult } = require('express-validator');
 
 /**
  * crearUsuario: Realiza el registro del usuario.
@@ -17,10 +18,20 @@ const crearUsuario = async (req, res = response) => {
  * @param {*} req
  * @param {*} res
  */
-const login = async (req, res) => {
+const login = async (req, res = response) => {
+  const errores = validationResult(req);
+  if (!errores.isEmpty()) {
+    return res.status(400).json({
+      ok: false,
+      errors: errores.mapped(),
+    });
+  }
+  const { email, password } = req.body;
   res.json({
     ok: true,
     msg: 'login',
+    email,
+    password,
   });
 };
 
