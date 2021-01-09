@@ -89,18 +89,26 @@ const login = async (req, res = response) => {
  * @param {*} res
  */
 const renewToken = async (req, res) => {
-  const uid = req.uid;
-  // Generar un nuevo JWT
-  const token = await generarJWT(uid);
+  try {
+    const uid = req.uid;
+    // Generar un nuevo JWT
+    const token = await generarJWT(uid);
 
-  // Obtener el usuario por uid
-  const usuario = await Usuario.findById(uid);
+    // Obtener el usuario por uid
+    const usuario = await Usuario.findById(uid);
 
-  res.json({
-    ok: true,
-    usuario,
-    token,
-  });
+    res.json({
+      ok: true,
+      usuario,
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: 'Hable con el administrador',
+    });
+  }
 };
 
 module.exports = {
