@@ -3,6 +3,7 @@ const {
   usuarioConectado,
   usuarioDesconectado,
   getUsuarios,
+  grabarMensaje,
 } = require('../controller/sockets');
 class Sockets {
   constructor(io) {
@@ -31,9 +32,9 @@ class Sockets {
       this.io.emit('lista-usuarios', await getUsuarios());
       // TODO: Socket join, uid
       // TODO: Escuchar cuándo el cliente manda un mensaje, mensaje-personal
-
-      socket.on('mensaje-persona', (payload) => {
-        console.log(payload);
+      socket.on('mensaje-persona', async (payload) => {
+        const mensaje = await grabarMensaje(payload);
+        console.log(mensaje);
       });
       // TODO: Manejar el disconnect, marcar en la base de datos que se desconecto
       // TODO: Emitir todos los usuarios conectados

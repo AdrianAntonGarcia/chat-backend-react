@@ -1,4 +1,6 @@
 const Usuario = require('../models/usuario');
+const Mensaje = require('../models/mensaje');
+
 const usuarioConectado = async (uid) => {
   try {
     const usuario = await Usuario.findById(uid);
@@ -7,6 +9,7 @@ const usuarioConectado = async (uid) => {
     return usuario;
   } catch (error) {
     console.log('Error en usuarioConectado', error);
+    return false;
   }
 };
 
@@ -18,6 +21,7 @@ const usuarioDesconectado = async (uid) => {
     return usuario;
   } catch (error) {
     console.log('Error en usuarioConectado', error);
+    return false;
   }
 };
 
@@ -27,6 +31,18 @@ const getUsuarios = async () => {
     return usuarios;
   } catch (error) {
     console.log('Error en getUsuarios', error);
+    return false;
+  }
+};
+
+const grabarMensaje = async (payload) => {
+  try {
+    const mensaje = new Mensaje(payload);
+    await mensaje.save();
+    return mensaje;
+  } catch (error) {
+    console.log('Error en grabarMensaje', error);
+    return false;
   }
 };
 
@@ -34,4 +50,5 @@ module.exports = {
   usuarioConectado,
   usuarioDesconectado,
   getUsuarios,
+  grabarMensaje,
 };
