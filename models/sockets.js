@@ -20,6 +20,10 @@ class Sockets {
         return socket.disconnect();
       }
       const usuario = await usuarioConectado(uid);
+
+      // Unir al usuario a una sala de socket.io, se crea por cada usuario su sala
+      socket.join(uid);
+
       // TODO: Validar el JWT
       // Si el token no es válido, desconectar
       // TODO: Saber que usuario está activo mediante el UID
@@ -27,6 +31,10 @@ class Sockets {
       this.io.emit('lista-usuarios', await getUsuarios());
       // TODO: Socket join, uid
       // TODO: Escuchar cuándo el cliente manda un mensaje, mensaje-personal
+
+      socket.on('mensaje-persona', (payload) => {
+        console.log(payload);
+      });
       // TODO: Manejar el disconnect, marcar en la base de datos que se desconecto
       // TODO: Emitir todos los usuarios conectados
       socket.on('disconnect', async () => {
