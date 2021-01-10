@@ -21,7 +21,17 @@ const usuarioDesconectado = async (uid) => {
   }
 };
 
+const getUsuarios = async () => {
+  try {
+    const usuarios = await Usuario.find().sort('-online');
+    return usuarios;
+  } catch (error) {
+    console.log('Error en getUsuarios', error);
+  }
+};
+
 module.exports = {
   usuarioConectado,
   usuarioDesconectado,
+  getUsuarios,
 };
