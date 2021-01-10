@@ -32,9 +32,10 @@ class Sockets {
       this.io.emit('lista-usuarios', await getUsuarios());
       // TODO: Socket join, uid
       // TODO: Escuchar cuándo el cliente manda un mensaje, mensaje-personal
-      socket.on('mensaje-persona', async (payload) => {
+      socket.on('mensaje-personal', async (payload) => {
         const mensaje = await grabarMensaje(payload);
-        console.log(mensaje);
+        this.io.to(payload.para).emit('mensaje-personal', mensaje);
+        this.io.to(payload.de).emit('mensaje-personal', mensaje);
       });
       // TODO: Manejar el disconnect, marcar en la base de datos que se desconecto
       // TODO: Emitir todos los usuarios conectados
